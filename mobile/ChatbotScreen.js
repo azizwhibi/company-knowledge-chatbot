@@ -73,10 +73,12 @@ export default function ChatbotScreen() {
     Always reply in English or french or arabic (depends on the language used from the user).`;
 
     try {
-      const apiKey = Constants.expoConfig?.extra?.GEMINI_API_KEY || 'AIzaSyBBoyBkJpY7jnB8_yPUyn0IRv955Vwwhdk';
+      const apiKey = Constants.expoConfig?.extra?.GEMINI_API_KEY 
+        || process.env.GEMINI_API_KEY 
+        || (Constants.expoConfig?.extra && Constants.expoConfig.extra.GEMINI_API_KEY);
       
-      if (!apiKey) {
-        throw new Error('GEMINI_API_KEY is not set. Please check your configuration.');
+      if (!apiKey || apiKey.includes('your_')) {
+        throw new Error('GEMINI_API_KEY is not configured properly. Please set it in your .env file or Expo config.');
       }
       
       const conversationHistory = [
